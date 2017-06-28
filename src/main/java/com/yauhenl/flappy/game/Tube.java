@@ -12,8 +12,8 @@ public class Tube {
     int closestTube=0;
     int gapDistance = Resources.TUBE_GAP_DISTANCE;
     int offset = 300;
-    private BufferedImage pillar1 = Resources.TUBE_UP_IMAGE;
-    private BufferedImage pillar2 = Resources.TUBE_DOWN_IMAGE;
+    private BufferedImage pillar1 = Resources.getInstance().TUBE_UP_IMAGE;
+    private BufferedImage pillar2 = Resources.getInstance().TUBE_DOWN_IMAGE;
 
     private int randY() {
         Random r = new Random();

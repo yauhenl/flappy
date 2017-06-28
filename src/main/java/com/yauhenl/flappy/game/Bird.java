@@ -23,33 +23,20 @@ public class Bird {
     boolean dead;
     double jumpVelocity = 3;
     double velocity = -2.5;
-    int fitness =0;
+    int fitness = 0;
 
-    BufferedImage birdImage = null;
-    BufferedImage birdImages[] = null;
+    private BufferedImage birdImages[] = null;
 
     Bird() {
 
         birdNetwork = new Network();
         setupNetwork();
-
-        try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            birdImage = ImageIO.read(new File(classLoader.getResource("assets/bird.png").getFile()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        birdImages = new BufferedImage[]{
-                upscale(birdImage.getSubimage(0, 0, 36, 26)),
-                upscale(birdImage.getSubimage(36, 0, 36, 26)),
-                upscale(birdImage.getSubimage(72, 0, 36, 26))
-        };
+        birdImages = Resources.getInstance().BIRD_IMAGES.clone();
 
         birdImages[0] = toBufferedImage(birdImages[0].getScaledInstance(
-                        (int) (birdImages[0].getWidth() / imgScale),
-                        (int) (birdImages[0].getHeight() / imgScale),
-                        1)
+                (int) (birdImages[0].getWidth() / imgScale),
+                (int) (birdImages[0].getHeight() / imgScale),
+                1)
         );
 
         birdImages[1] = toBufferedImage(birdImages[1].getScaledInstance((int) (birdImages[1].getWidth() / imgScale), (int) (birdImages[1].getHeight() / imgScale), 1));
@@ -61,15 +48,13 @@ public class Bird {
         return a + f * (b - a);
     }
 
-    public void reset()
-    {
-        yPos=Resources.BIRD_Y_POSITION;
-        dead=false;
-        velocity=0;
+    public void reset() {
+        yPos = Resources.BIRD_Y_POSITION;
+        dead = false;
+        velocity = 0;
     }
 
-    public void setupNetwork()
-    {
+    public void setupNetwork() {
         ArrayList<Neuron> inputs = new ArrayList<>();
         inputs.add(new Neuron());
         inputs.add(new Neuron());
@@ -101,10 +86,10 @@ public class Bird {
 
         if (dead) return;
 
-        double birdYPossition = (double)yPos/Resources.HEIGHT;
-        double nextTubeHeigth = ((Resources.nextTube.getY() + Resources.TUBE_HEIGHT + Resources.TUBE_GAP_DISTANCE/2)-560+Resources.TUBE_HEIGHT)/(-260+560); // 80-380
-        double distanceFromNextTube = ((Resources.nextTube.getX() - Resources.BIRD_X_POSITION)%300)/300;
-        double inputs[] = new double[]{birdYPossition-nextTubeHeigth,nextTubeHeigth-birdYPossition,distanceFromNextTube};
+        double birdYPossition = (double) yPos / Resources.HEIGHT;
+        double nextTubeHeigth = ((Resources.nextTube.getY() + Resources.TUBE_HEIGHT + Resources.TUBE_GAP_DISTANCE / 2) - 560 + Resources.TUBE_HEIGHT) / (-260 + 560); // 80-380
+        double distanceFromNextTube = ((Resources.nextTube.getX() - Resources.BIRD_X_POSITION) % 300) / 300;
+        double inputs[] = new double[]{birdYPossition - nextTubeHeigth, nextTubeHeigth - birdYPossition, distanceFromNextTube};
         birdNetwork.setInputValues(inputs);
 
         if (birdNetwork.propagate() > 0.6) {
@@ -112,15 +97,16 @@ public class Bird {
         }
 
         if (velocity >= -15) velocity -= 0.5;
-        if (velocity > 0) { yPos -= jumpVelocity * velocity; }
-        else {
+        if (velocity > 0) {
+            yPos -= jumpVelocity * velocity;
+        } else {
             yPos -= velocity;
         }
 
-        if (yPos > Resources.HEIGHT - 100 || yPos<0) {
+        if (yPos > Resources.HEIGHT - 100 || yPos < 0) {
             dead = true;
             Resources.NO_OF_BIRDS_ALIVE--;
-            fitness=Resources.fitnessPillars;
+            fitness = Resources.fitnessPillars;
         }
         if (Resources.IN_TUBE) {
             int leftBird = Resources.BIRD_X_POSITION;
@@ -135,7 +121,7 @@ public class Bird {
                 if (!(topTube < topBird) || !(bottomBird < bottomTube)) {
                     dead = true;
                     Resources.NO_OF_BIRDS_ALIVE--;
-                    fitness=Resources.fitnessPillars;
+                    fitness = Resources.fitnessPillars;
                 }
             } else {
                 Resources.IN_TUBE = false;

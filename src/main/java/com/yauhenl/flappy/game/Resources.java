@@ -20,11 +20,11 @@ public class Resources {
     /* Singleton */
     private static Resources instance = null;
 
-    public static BufferedImage BACKGROUND_IMAGE;
-    public static BufferedImage GROUND_IMAGE;
-    public static BufferedImage TUBE_UP_IMAGE;
-    public static BufferedImage TUBE_DOWN_IMAGE;
-    public static BufferedImage[] BIRD_IMAGES;
+    public BufferedImage BACKGROUND_IMAGE;
+    public BufferedImage GROUND_IMAGE;
+    public BufferedImage TUBE_UP_IMAGE;
+    public BufferedImage TUBE_DOWN_IMAGE;
+    public BufferedImage[] BIRD_IMAGES;
 
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
@@ -40,35 +40,35 @@ public class Resources {
     public static final int TUBE_GAP_DISTANCE = 160;
     public static final int BIRD_X_POSITION = 100;
     public static final int BIRD_Y_POSITION = 100;
-    public static final int NO_OF_BIRDS = 200;
+    public static final int NO_OF_BIRDS = 2000;
 
     public static boolean IN_TUBE = false;
     public static Point CURRENT_TUBE = new Point(0, 0);
 
-    public static HashMap<Neuron,Double> visitedNeurons=new HashMap<>();
-    public static Point nextTube=new Point(0,0);
+    public static HashMap<Neuron, Double> visitedNeurons = new HashMap<>();
+    public static Point nextTube = new Point(0, 0);
 
-    public static int fitnessPillars =0;
+    public static int fitnessPillars = 0;
     public static int NO_OF_BIRDS_ALIVE = 200;
 
-    static {
+    private static File getFileByPath(String path) {
+        return new File(ClassLoader.getSystemClassLoader().getResource(path).getFile());
+    }
+
+    protected Resources() {
         try {
-            BACKGROUND_IMAGE = upscale(ImageIO.read(new File("assets/bg.png")));
-            GROUND_IMAGE = upscale(ImageIO.read(new File("assets/ground.png")));
-            final BufferedImage birdImage = ImageIO.read(new File("assets/bird.png"));
+            BACKGROUND_IMAGE = upscale(ImageIO.read(getFileByPath("assets/bg.png")));
+            GROUND_IMAGE = upscale(ImageIO.read(getFileByPath("assets/ground.png")));
+            final BufferedImage birdImage = ImageIO.read(getFileByPath("assets/bird.png"));
             BIRD_IMAGES = new BufferedImage[]{
                     upscale(birdImage.getSubimage(0, 0, 36, 26)),
                     upscale(birdImage.getSubimage(36, 0, 36, 26)),
                     upscale(birdImage.getSubimage(72, 0, 36, 26))};
-            TUBE_UP_IMAGE = upscale(ImageIO.read(new File("assets/tube1.png")));
-            TUBE_DOWN_IMAGE = upscale(ImageIO.read(new File("assets/tube2.png")));
+            TUBE_UP_IMAGE = upscale(ImageIO.read(getFileByPath("assets/tube1.png")));
+            TUBE_DOWN_IMAGE = upscale(ImageIO.read(getFileByPath("assets/tube2.png")));
         } catch (Exception e) {
             System.out.println("[ERROR] Cannot load resources!");
         }
-    }
-
-    protected Resources() {
-
     }
 
     public static Resources getInstance() {
@@ -78,11 +78,10 @@ public class Resources {
         return instance;
     }
 
-    public static void reset()
-    {
-        fitnessPillars=0;
-        nextTube=new Point(0,0);
-        visitedNeurons=new HashMap<>();
+    public static void reset() {
+        fitnessPillars = 0;
+        nextTube = new Point(0, 0);
+        visitedNeurons = new HashMap<>();
         CURRENT_TUBE = new Point(0, 0);
         IN_TUBE = false;
     }

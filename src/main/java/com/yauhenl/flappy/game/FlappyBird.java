@@ -12,13 +12,10 @@ public class FlappyBird extends GameFrame {
     Ground ground = new Ground();
 
     public FlappyBird() {
-
+        Resources.getInstance();
         for (int i = 0; i < Resources.NO_OF_BIRDS; i++) {
             birdsList.add(new Bird());
         }
-
-        Resources.getInstance();
-
         startThread();
     }
 
@@ -28,7 +25,7 @@ public class FlappyBird extends GameFrame {
         Resources.reset();
 
         /* Sets up an anonimous sort function and sorts the array of birds accourding to fitness */
-        birdsList.sort((bird1, bird2) -> ((Integer) bird2.fitness).compareTo((Integer) bird1.fitness));
+        birdsList.sort((bird1, bird2) -> ((Integer) bird2.fitness).compareTo(bird1.fitness));
 
         for (int i = 0; i < Resources.NO_OF_BIRDS / 2; i++) {
             birdsList.get(i).reset();
@@ -45,7 +42,7 @@ public class FlappyBird extends GameFrame {
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g.drawImage(Resources.BACKGROUND_IMAGE, 0, 0, 1280, 720, null);
+        g.drawImage(Resources.getInstance().BACKGROUND_IMAGE, 0, 0, 1280, 720, null);
 
         for (Bird b : birdsList)
             b.render(g);

@@ -9,7 +9,7 @@ public class Ground {
     int xPos[] = new int[groundTextures];
 
 
-    private BufferedImage ground = Resources.GROUND_IMAGE;
+    private BufferedImage ground = Resources.getInstance().GROUND_IMAGE;
 
     public Ground() {
         for (int i = 0; i < groundTextures; i++) {
